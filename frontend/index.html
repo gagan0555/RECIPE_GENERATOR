@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Generator System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #eee;
+            background: #f5f5f5;
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 15px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            min-width: 150px;
+            font-weight: 500;
+        }
+
+        .tab-button:hover {
+            background: #eeeeee;
+            color: #667eea;
+        }
+
+        .tab-button.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background: white;
+        }
+
+        .content {
+            padding: 40px;
+            max-height: calc(100vh - 300px);
+            overflow-y: auto;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .recipes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .recipe-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .recipe-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .recipe-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .recipe-card p {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .ingredients-list {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 0.9em;
+        }
+
+        .ingredients-list li {
+            list-style-position: inside;
+            color: #555;
+            margin: 5px 0;
+        }
+
+        .alert {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border-left-color: #28a745;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border-left-color: #f5c6cb;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border-left-color: #bee5eb;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .stat-card h3 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .stat-card p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .tab-button {
+                min-width: 100px;
+                padding: 10px;
+                font-size: 0.9em;
+            }
+
+            .recipes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🍳 Recipe Generator</h1>
+            <p>Discover amazing recipes with intelligent search and ranking</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('home')">🏠 Home</button>
+            <button class="tab-button" onclick="switchTab('add-recipe')">➕ Add Recipe</button>
+            <button class="tab-button" onclick="switchTab('search')">🔍 Search</button>
+            <button class="tab-button" onclick="switchTab('all-recipes')">📚 All Recipes</button>
+            <button class="tab-button" onclick="switchTab('statistics')">📊 Statistics</button>
+        </div>
+
+        <div class="content">
+
+            <!-- Home Tab -->
+            <div id="home" class="tab-content active">
+                <h2>Welcome to Recipe Generator! 👨‍🍳</h2>
+                <p style="margin: 20px 0; color: #666; line-height: 1.6;">
+                    This intelligent recipe management system helps you discover, organize, and cook amazing recipes. 
+                    With features like ingredient-based search and recipe ranking, cooking has never been easier!
+                </p>
+
+                <div class="stat-card">
+                    <h3 id="total-recipes">0</h3>
+                    <p>Total Recipes</p>
+                </div>
+
+                <h3 style="margin-top: 30px; color: #667eea;">Features:</h3>
+                <ul style="margin-left: 20px; color: #666;">
+                    <li>✨ Add and manage recipes</li>
+                    <li>🔎 Search recipes by ingredients</li>
+                    <li>⭐ Get ranked recommendations</li>
+                    <li>📚 View all recipes</li>
+                    <li>💾 Real-time API communication</li>
+                </ul>
+            </div>
+
+            <!-- Add Recipe Tab -->
+            <div id="add-recipe" class="tab-content">
+                <h2>Add New Recipe</h2>
+                <form onsubmit="addRecipe(event)">
+                    <div class="form-group">
+                        <label for="recipe-name">Recipe Name *</label>
+                        <input type="text" id="recipe-name" placeholder="e.g., Spaghetti Carbonara" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recipe-ingredients">Ingredients * (comma-separated)</label>
+                        <input type="text" id="recipe-ingredients" placeholder="e.g., pasta, eggs, bacon, cheese" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recipe-instructions">Instructions *</label>
+                        <textarea id="recipe-instructions" placeholder="1. Boil pasta&#10;2. Cook bacon&#10;3. Mix ingredients..." required></textarea>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit">➕ Add Recipe</button>
+                        <button type="reset">🔄 Clear</button>
+                    </div>
+                </form>
+
+                <div id="add-recipe-message"></div>
+            </div>
+
+            <!-- Search Tab -->
+            <div id="search" class="tab-content">
+                <h2>Search Recipes</h2>
+
+                <div class="form-group">
+                    <label for="search-ingredients">Enter Ingredients (comma-separated)</label>
+                    <input type="text" id="search-ingredients" placeholder="e.g., tomato, cheese, pasta">
+                </div>
+
+                <div class="button-group">
+                    <button onclick="basicSearch()">🔍 Basic Search</button>
+                    <button onclick="rankingSearch()">⭐ Search with Ranking</button>
+                </div>
+
+                <div id="search-results"></div>
+            </div>
+
+            <!-- All Recipes Tab -->
+            <div id="all-recipes" class="tab-content">
+                <h2>All Recipes</h2>
+                <button onclick="loadAllRecipes()" style="margin-bottom: 20px;">📚 Load All Recipes</button>
+                <div id="all-recipes-container"></div>
+            </div>
+
+            <!-- Statistics Tab -->
+            <div id="statistics" class="tab-content">
+                <h2>Database Statistics</h2>
+                <div id="statistics-content"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_BASE = '/api';  // Uses relative path for better compatibility
+
+        // Tab switching
+        function switchTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            if (tabName === 'statistics') {
+                loadStatistics();
+            } else if (tabName === 'all-recipes') {
+                // Auto-load when visiting tab
+            }
+        }
+
+        // Add Recipe
+        function addRecipe(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('recipe-name').value.trim();
+            const ingredientsText = document.getElementById('recipe-ingredients').value.trim();
+            const instructions = document.getElementById('recipe-instructions').value.trim();
+
+            if (!name || !ingredientsText || !instructions) {
+                showMessage('add-recipe-message', 'Please fill all fields', 'error');
+                return;
+            }
+
+            const ingredients = ingredientsText.split(',').map(ing => ing.trim()).filter(ing => ing);
+
+            if (ingredients.length === 0) {
+                showMessage('add-recipe-message', 'Please add at least one ingredient', 'error');
+                return;
+            }
+
+            const data = {
+                name: name,
+                ingredients: ingredients,
+                instructions: instructions
+            };
+
+            fetch(API_BASE + '/add_recipe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.error) {
+                    showMessage('add-recipe-message', '❌ Error: ' + result.error, 'error');
+                } else {
+                    showMessage('add-recipe-message', '✅ Recipe added successfully!', 'success');
+                    document.getElementById('recipe-name').value = '';
+                    document.getElementById('recipe-ingredients').value = '';
+                    document.getElementById('recipe-instructions').value = '';
+                    updateRecipeCount();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showMessage('add-recipe-message', '❌ Connection error: ' + error.message, 'error');
+            });
+        }
+
+        // Basic Search
+        function basicSearch() {
+            const ingredientsText = document.getElementById('search-ingredients').value.trim();
+
+            if (!ingredientsText) {
+                showMessage('search-results', 'Please enter at least one ingredient', 'error');
+                return;
+            }
+
+            document.getElementById('search-results').innerHTML = '<div class="loading"><span class="spinner"></span> Searching...</div>';
+
+            const ingredients = ingredientsText.split(',').map(ing => ing.trim()).filter(ing => ing);
+
+            fetch(API_BASE + '/search_recipes', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ingredients: ingredients })
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.error) {
+                    document.getElementById('search-results').innerHTML = 
+                        '<div class="alert alert-error">❌ Error: ' + result.error + '</div>';
+                } else {
+                    displayRecipeResults(result.recipes || [], 'search-results');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('search-results').innerHTML = 
+                    '<div class="alert alert-error">❌ Connection error: ' + error.message + '</div>';
+            });
+        }
+
+        // Ranking Search
+        function rankingSearch() {
+            const ingredientsText = document.getElementById('search-ingredients').value.trim();
+
+            if (!ingredientsText) {
+                showMessage('search-results', 'Please enter at least one ingredient', 'error');
+                return;
+            }
+
+            document.getElementById('search-results').innerHTML = '<div class="loading"><span class="spinner"></span> Searching with ranking...</div>';
+
+            const ingredients = ingredientsText.split(',').map(ing => ing.trim()).filter(ing => ing);
+
+            fetch(API_BASE + '/search_recipes', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ingredients: ingredients })
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.error) {
+                    document.getElementById('search-results').innerHTML = 
+                        '<div class="alert alert-error">❌ Error: ' + result.error + '</div>';
+                    return;
+                }
+
+                let recipes = result.recipes || [];
+                if (recipes.length === 0) {
+                    document.getElementById('search-results').innerHTML = 
+                        '<div class="alert alert-info">No recipes found with these ingredients.</div>';
+                    return;
+                }
+
+                let html = '<h3>⭐ Ranked Results</h3>';
+                recipes.forEach((recipe, index) => {
+                    html += `
+                        <div class="recipe-card" style="margin-top: 15px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <h3>Rank #${index + 1}: ${recipe.name}</h3>
+                                <span style="background: #667eea; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold;">
+                                    ${recipe.score.toFixed(1)}%
+                                </span>
+                            </div>
+                            <p>Match: ${recipe.matches}/${recipe.total_ingredients} ingredients</p>
+                            <ul class="ingredients-list">
+                                ${recipe.ingredients.map(ing => `<li>${ing}</li>`).join('')}
+                            </ul>
+                            <p><strong>Instructions:</strong> ${recipe.instructions}</p>
+                        </div>
+                    `;
+                });
+
+                document.getElementById('search-results').innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('search-results').innerHTML = 
+                    '<div class="alert alert-error">❌ Connection error: ' + error.message + '</div>';
+            });
+        }
+
+        // Load All Recipes
+        function loadAllRecipes() {
+            document.getElementById('all-recipes-container').innerHTML = '<div class="loading"><span class="spinner"></span> Loading recipes...</div>';
+
+            fetch(API_BASE + '/get_recipes')
+            .then(response => response.json())
+            .then(result => {
+                if (result.error) {
+                    document.getElementById('all-recipes-container').innerHTML = 
+                        '<div class="alert alert-error">❌ Error: ' + result.error + '</div>';
+                } else {
+                    displayRecipeResults(result.recipes || [], 'all-recipes-container');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('all-recipes-container').innerHTML = 
+                    '<div class="alert alert-error">❌ Connection error: ' + error.message + '</div>';
+            });
+        }
+
+        // Load Statistics
+        function loadStatistics() {
+            fetch(API_BASE + '/statistics')
+            .then(response => response.json())
+            .then(result => {
+                if (result.error) {
+                    document.getElementById('statistics-content').innerHTML = 
+                        '<div class="alert alert-error">❌ Error: ' + result.error + '</div>';
+                    return;
+                }
+
+                let html = `
+                    <div class="stat-card">
+                        <h3>${result.total_recipes}</h3>
+                        <p>Total Recipes</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>${result.avg_ingredients.toFixed(1)}</h3>
+                        <p>Avg Ingredients per Recipe</p>
+                    </div>
+                `;
+
+                document.getElementById('statistics-content').innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('statistics-content').innerHTML = 
+                    '<div class="alert alert-error">❌ Connection error: ' + error.message + '</div>';
+            });
+        }
+
+        // Display Recipe Results
+        function displayRecipeResults(recipes, containerId) {
+            const container = document.getElementById(containerId);
+
+            if (recipes.length === 0) {
+                container.innerHTML = '<div class="alert alert-info">No recipes found.</div>';
+                return;
+            }
+
+            let html = '<div class="recipes-grid">';
+            recipes.forEach(recipe => {
+                html += `
+                    <div class="recipe-card">
+                        <h3>${recipe.name}</h3>
+                        <strong style="color: #667eea;">Ingredients:</strong>
+                        <ul class="ingredients-list">
+                            ${recipe.ingredients.map(ing => `<li>${ing}</li>`).join('')}
+                        </ul>
+                        <p><strong>Instructions:</strong> ${recipe.instructions}</p>
+                    </div>
+                `;
+            });
+            html += '</div>';
+
+            container.innerHTML = html;
+        }
+
+        // Show Message
+        function showMessage(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+
+            if (type === 'success') {
+                setTimeout(() => {
+                    element.innerHTML = '';
+                }, 3000);
+            }
+        }
+
+        // Update Recipe Count
+        function updateRecipeCount() {
+            fetch(API_BASE + '/get_recipes')
+            .then(response => response.json())
+            .then(result => {
+                const count = result.recipes ? result.recipes.length : 0;
+                document.getElementById('total-recipes').textContent = count;
+            })
+            .catch(error => console.log('Could not update count:', error));
+        }
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            updateRecipeCount();
+        });
+    </script>
+</body>
+</html>
+```
