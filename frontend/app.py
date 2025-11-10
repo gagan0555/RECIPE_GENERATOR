@@ -35,7 +35,7 @@ def add_recipe():
         print(f"[DEBUG] Calling backend_api with: add '{name}' '{ingredients_csv}' '{instructions}'")
 
         result = subprocess.run(
-            ['./backend_api', 'add', name, ingredients_csv, instructions],
+            ['./backend/backend_api', 'add', name, ingredients_csv, instructions],
             capture_output=True,
             text=True,
             timeout=5
@@ -89,7 +89,7 @@ def search_recipes():
         print(f"[DEBUG] Calling backend_api with: search '{ingredients_csv}'")
 
         result = subprocess.run(
-            ['./backend_api', 'search', ingredients_csv],
+            ['./backend/backend_api', 'search', ingredients_csv],
             capture_output=True,
             text=True,
             timeout=5
@@ -143,7 +143,7 @@ def search_ranked():
         print(f"[DEBUG] Calling backend_api with: search_ranked '{ingredients_csv}'")
 
         result = subprocess.run(
-            ['./backend_api', 'search_ranked', ingredients_csv],
+            ['./backend/backend_api', 'search_ranked', ingredients_csv],
             capture_output=True,
             text=True,
             timeout=5
@@ -196,7 +196,7 @@ def get_substitutes():
         print(f"[DEBUG] Calling backend_api with: substitutes '{ingredient}'")
 
         result = subprocess.run(
-            ['./backend_api', 'substitutes', ingredient],
+            ['./backend/backend_api', 'substitutes', ingredient],
             capture_output=True,
             text=True,
             timeout=5
@@ -250,7 +250,7 @@ def search_with_substitutes():
         print(f"[DEBUG] Calling backend_api with: search_with_subs '{ingredients_csv}'")
 
         result = subprocess.run(
-            ['./backend_api', 'search_with_subs', ingredients_csv],
+            ['./backend/backend_api', 'search_with_subs', ingredients_csv],
             capture_output=True,
             text=True,
             timeout=5
@@ -296,7 +296,7 @@ def get_recipes():
         print(f"[DEBUG] Calling backend_api with: list")
 
         result = subprocess.run(
-            ['./backend_api', 'list'],
+            ['./backend/backend_api', 'list'],
             capture_output=True,
             text=True,
             timeout=5
@@ -347,7 +347,7 @@ def get_statistics():
         print(f"[DEBUG] Calling backend_api with: stats")
 
         result = subprocess.run(
-            ['./backend_api', 'stats'],
+            ['./backend/backend_api', 'stats'],
             capture_output=True,
             text=True,
             timeout=5
@@ -391,7 +391,6 @@ if __name__ == '__main__':
     print("="*60)
     print(f"Starting on http://0.0.0.0:5000")
     print(f"Frontend: http://localhost:5000")
-    print(f"Make sure 'backend_api' executable is in current directory!")
     print("\nNEW ENDPOINTS:")
     print("  - POST /api/search_ranked")
     print("  - POST /api/get_substitutes")
