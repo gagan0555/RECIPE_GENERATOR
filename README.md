@@ -1,11 +1,11 @@
 *Recipe Manager Project*
 
 
-Welcome to the Recipe Manager project! This repository contains the source code for a full-stack recipe management system with a C backend and a Python Flask frontend.
+*Welcome to the Recipe Manager project! This repository contains the source code for a full-stack recipe management system with a C backend and a Python Flask frontend.
 
 
 
-Project Description
+*Project Description
 ~This project implements a recipe manager with the following features:
 ~Backend implemented in C for fast data processing
 ~Frontend powered by Python Flask to interact with users via API and some UI
@@ -15,7 +15,7 @@ Project Description
 
 
 
-Project Structure
+*Project Structure
 text
 backend/
 │  backend_api.c
@@ -33,21 +33,21 @@ frontend/
 README.md
 
 
-Setup Instructions
+*Setup Instructions
 
-Building Backend
+-Building Backend
 Run make in the backend/ folder to build backend_api
 Requires gcc with C99 support
 
-Running Frontend
+-Running Frontend
 Use Python 3 and install dependencies:
 pip install -r frontend/requirements.txt
 Run Flask app:
-python frontend/app_enhanced.py
+python frontend/app.py
 Access at http://localhost:5000
 
-Contributing
-Feel free to fork and create pull requests. Please adhere to code style and include tests if possible.
+*Contributing
+Feel free to fork and create pull requests. Please adhere to code style and include tests if possible
 
-Contact
-For queries or support, contact [gagneeshsingh@mail.com].
+*Contact
+For queries or support, contact [gagneeshsingh@gmail.com].
