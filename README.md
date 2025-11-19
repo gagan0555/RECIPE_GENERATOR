@@ -46,6 +46,9 @@ Run Flask app:
 python frontend/app.py
 Access at http://localhost:5000
 
+*render-https://recipe-generator-tz21.onrender.com
+
+
 *Contributing
 Feel free to fork and create pull requests. Please adhere to code style and include tests if possible
 
