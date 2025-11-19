@@ -252,7 +252,6 @@
                 <div class="button-group">
                     <button onclick="basicSearch()">🔍 Basic Search</button>
                     <button onclick="rankingSearch()">⭐ Ranked Search</button>
-                    <button onclick="searchWithSubstitutes()">🔄 Search with Substitutes</button>
                 </div>
                 <div id="search-results"></div>
             </div>
@@ -394,23 +393,7 @@
             document.getElementById('search-results').innerHTML = html;
         }
 
-        async function searchWithSubstitutes() {
-            const ingredientsText = document.getElementById('search-ingredients').value.trim();
-            if (!ingredientsText) {
-                showMessage('search-results', 'Please enter ingredients', 'error');
-                return;
-            }
-
-            showLoading('search-results');
-            const ingredients = ingredientsText.split(',').map(i => i.trim()).filter(i => i);
-            const result = await apiCall('/search_with_substitutes', 'POST', { ingredients });
-            
-            if (result.error) {
-                showMessage('search-results', '❌ Error: ' + result.error, 'error');
-            } else {
-                displayRecipes(result.recipes || [], 'search-results', '<h3>🔄 Search Results (with Substitutes)</h3>');
-            }
-        }
+  
 
         async function getSubstitutes() {
             const ingredient = document.getElementById('substitute-ingredient').value.trim();
