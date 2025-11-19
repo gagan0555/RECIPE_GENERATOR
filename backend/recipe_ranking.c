@@ -67,7 +67,7 @@ void heapifyUp(RecipeHeap* heap, int index) {
 void insertRankedRecipe(RecipeHeap* heap, int recipeId, int matchCount, 
                         int totalIngredients, int userIngredientCount) {
     if (heap->size >= MAX_HEAP_SIZE) {
-        printf("Heap is full!\n");
+        fprintf(stderr,"Heap is full!\n");
         return;
     }
     
@@ -93,10 +93,10 @@ RankedRecipe extractMax(RecipeHeap* heap) {
 
 // Rank and display recipes from heap
 void rankAndDisplayRecipes(RecipeManager* manager, RecipeHeap* heap) {
-    printf("\n=== RANKED RECIPE RECOMMENDATIONS ===\n");
+   fprintf(stderr,"\n=== RANKED RECIPE RECOMMENDATIONS ===\n");
     
     if (heap->size == 0) {
-        printf("No recipes to display.\n");
+        fprintf(stderr,"No recipes to display.\n");
         return;
     }
     
@@ -106,8 +106,8 @@ void rankAndDisplayRecipes(RecipeManager* manager, RecipeHeap* heap) {
     while (tempHeap.size > 0) {
         RankedRecipe ranked = extractMax(&tempHeap);
         
-        printf("\n--- RANK #%d (Score: %.2f) ---\n", rank++, ranked.score);
-        printf("Match: %d/%d ingredients (%.1f%% complete)\n", 
+        fprintf(stderr,"\n--- RANK #%d (Score: %.2f) ---\n", rank++, ranked.score);
+       fprintf(stderr,"Match: %d/%d ingredients (%.1f%% complete)\n", 
                ranked.matchCount, ranked.totalIngredients,
                (float)ranked.matchCount / ranked.totalIngredients * 100);
         
@@ -120,5 +120,5 @@ void rankAndDisplayRecipes(RecipeManager* manager, RecipeHeap* heap) {
         }
     }
     
-    printf("=====================================\n");
+   fprintf(stderr,"=====================================\n");
 }
