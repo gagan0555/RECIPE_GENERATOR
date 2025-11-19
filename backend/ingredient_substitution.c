@@ -48,7 +48,7 @@ void addSubstitution(IngredientGraph* graph, const char* ingredient, const char*
     SubstitutionNode* node = findNode(graph, lowerIngredient);
     if (node == NULL) {
         if (graph->nodeCount >= MAX_GRAPH_NODES) {
-            printf("Graph is full. Cannot add more ingredients.\n");
+            fprintf(stderr,"Graph is full. Cannot add more ingredients.\n");
             return;
         }
         
@@ -69,7 +69,7 @@ void addSubstitution(IngredientGraph* graph, const char* ingredient, const char*
     if (node->substituteCount < MAX_SUBSTITUTIONS) {
         strcpy(node->substitutes[node->substituteCount++], lowerSubstitute);
     } else {
-        printf("Maximum substitutions reached for %s\n", ingredient);
+        fprintf(stderr,"Maximum substitutions reached for %s\n", ingredient);
     }
 }
 
@@ -91,17 +91,17 @@ void findSubstitutes(IngredientGraph* graph, const char* ingredient,
 
 // Display all substitution relationships
 void displayAllSubstitutions(IngredientGraph* graph) {
-    printf("\n=== INGREDIENT SUBSTITUTION GRAPH ===\n");
+    fprintf(stderr,"\n=== INGREDIENT SUBSTITUTION GRAPH ===\n");
     if (graph->nodeCount == 0) {
-        printf("No substitutions available.\n");
+       fprintf(stderr,"No substitutions available.\n");
         return;
     }
     
     for (int i = 0; i < graph->nodeCount; i++) {
         if (graph->nodes[i] != NULL) {
-            printf("\n%s can be substituted with:\n", graph->nodes[i]->ingredient);
+           fprintf(stderr,"\n%s can be substituted with:\n", graph->nodes[i]->ingredient);
             for (int j = 0; j < graph->nodes[i]->substituteCount; j++) {
-                printf("  - %s\n", graph->nodes[i]->substitutes[j]);
+                fprintf(stderr,"  - %s\n", graph->nodes[i]->substitutes[j]);
             }
         }
     }
@@ -140,7 +140,7 @@ void loadDefaultSubstitutions(IngredientGraph* graph) {
     addSubstitution(graph, "olive oil", "vegetable oil");
     addSubstitution(graph, "olive oil", "coconut oil");
     
-    printf("Loaded %d ingredient substitution relationships.\n", graph->nodeCount);
+    fprintf(stderr,"Loaded %d ingredient substitution relationships.\n", graph->nodeCount);
 }
 
 // Cleanup the graph
