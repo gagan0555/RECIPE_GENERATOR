@@ -92,11 +92,3 @@ int importRecipesFromText(RecipeManager* manager, const char* filename) {
     return 1;
 }
 
-int createBackup(RecipeManager* manager) {
-    return saveRecipesToFile(manager, BACKUP_FILE);
-}
-
-int restoreFromBackup(RecipeManager* manager) {
-    fprintf(stderr, "Restoring from backup...\n");
-    return loadRecipesFromFile(manager, BACKUP_FILE);
-}
