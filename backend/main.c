@@ -1,57 +1,3 @@
-/*#include "cli.h"
-#include <stdio.h>
-#include <stdlib.h>
-
-int main() {
-    RecipeManager manager;
-    int choice;
-    
-    printf("Initializing Recipe Generator System...\n");
-    
-    
-    initRecipeManager(&manager);
-    
-   
-    printf("Loading sample recipes...\n");
-    loadSampleRecipes(&manager);
-    
-    printf("\nWelcome to the Recipe Generator System!\n");
-    
-    do {
-        showMainMenu();
-        scanf("%d", &choice);
-        
-        switch (choice) {
-            case 1:
-                addRecipeInteractive(&manager);
-                break;
-            case 2:
-                searchRecipesInteractive(&manager);
-                break;
-            case 3:
-                displayAllRecipes(&manager);
-                break;
-            case 4:
-                printf("\nThank you for using Recipe Generator System!\n");
-                break;
-            default:
-                printf("\nInvalid choice. Please select 1-4.\n");
-                break;
-        }
-        
-        if (choice != 4) {
-            printf("\nPress Enter to continue...");
-            getchar();
-            getchar(); 
-        }
-        
-    } while (choice != 4);
-    
-   
-    cleanupRecipeManager(&manager);
-    
-    return 0;
-}*/
 #include "enhanced_ui.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -147,4 +93,5 @@ int main() {
     
     return 0;
 }
+
 
