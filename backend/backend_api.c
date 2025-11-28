@@ -310,7 +310,6 @@ void handle_statistics() {
 
 int main(int argc, char* argv[]) {
     initialize_system();
-loadRecipesFromFile(&global_manager.recipes, RECIPES_FILE);
     if (argc < 2) {
         print_json_error("Missing command");
         cleanup_system();
@@ -334,7 +333,6 @@ loadRecipesFromFile(&global_manager.recipes, RECIPES_FILE);
     } else if (strcmp(command, "stats") == 0) {
         handle_statistics();
     } else {
-        saveRecipesToFile(&global_manager.recipes, RECIPES_FILE);
         print_json_error("Unknown command");
         cleanup_system();
         return 1;
