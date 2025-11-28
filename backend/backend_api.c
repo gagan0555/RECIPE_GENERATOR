@@ -310,7 +310,7 @@ void handle_statistics() {
 
 int main(int argc, char* argv[]) {
     initialize_system();
-
+loadRecipesFromFile(&manager, RECIPES_FILE);
     if (argc < 2) {
         print_json_error("Missing command");
         cleanup_system();
