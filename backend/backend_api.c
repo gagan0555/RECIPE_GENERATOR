@@ -334,7 +334,7 @@ loadRecipesFromFile(&global_manager.recipes, RECIPES_FILE);
     } else if (strcmp(command, "stats") == 0) {
         handle_statistics();
     } else {
-        saveRecipesToFile(&manager, RECIPES_FILE);
+        saveRecipesToFile(&global_manager.recipes, RECIPES_FILE);
         print_json_error("Unknown command");
         cleanup_system();
         return 1;
